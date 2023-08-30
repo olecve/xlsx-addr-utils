@@ -1,0 +1,9 @@
+{
+  "name": "xlsx-addr-utils",
+  "version": "0.0.1",
+  "description": "Simplify manipulation of XLSX cell addresses",
+  "main": "index.js",
+  "repository": "https://github.com/olecve/xlsx-addr-utils",
+  "author": "Oleg Tsvetkov <olecve@gmail.com>",
+  "license": "MIT"
+}
