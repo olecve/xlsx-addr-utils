@@ -9,14 +9,14 @@ export function isValidCellRange(range: string): boolean {
   return cellRangePattern.test(range)
 }
 
-export function setColumn(address: string, newColumn: number | string) {
+export function setColumn(address: string, newColumn: string): string {
   const rowMatch = address.match(/\d+/)
   if (!rowMatch) throw new Error(`Invalid address format: ${address}`)
   const rowPart = rowMatch[0]
   return newColumn + rowPart
 }
 
-export function setRow(address: string, newRow: number | string) {
+export function setRow(address: string, newRow: number | string): string {
   const columnMatch = address.match(/[A-Z]+/)
   if (!columnMatch) throw new Error(`Invalid address format: ${address}`)
   const columnPart = columnMatch[0]
