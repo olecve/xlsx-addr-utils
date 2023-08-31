@@ -5,5 +5,9 @@
   "main": "index.js",
   "repository": "https://github.com/olecve/xlsx-addr-utils",
   "author": "Oleg Tsvetkov <olecve@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "prettier": "^3.0.3",
+    "typescript": "^5.2.2"
+  }
 }
