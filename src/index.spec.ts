@@ -8,8 +8,10 @@ it('isValidCellAddress', () => {
   expect(isValidCellAddress('AA11')).toBe(true)
   expect(isValidCellAddress('AB12')).toBe(true)
   expect(isValidCellAddress('ABC123')).toBe(true)
+  expect(isValidCellAddress('A10')).toBe(true)
 
   expect(isValidCellAddress('A0')).toBe(false)
+  expect(isValidCellAddress('A01')).toBe(false)
   expect(isValidCellAddress('A')).toBe(false)
   expect(isValidCellAddress('Z')).toBe(false)
   expect(isValidCellAddress('0')).toBe(false)
