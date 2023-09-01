@@ -30,11 +30,11 @@ function parseCellAddress(cellAddress: string): { columnPart: string; rowPart: s
   return { columnPart, rowPart }
 }
 
-function excelColumnToNumber(excelColumn: string) {
+function xlsxColumnToNumber(excelColumn: string) {
   return excelColumn.split('').reduce((result, currentValue) => result * 26 + parseInt(currentValue, 36) - 9, 0)
 }
 
-function numberToExcelColumn(excelColumnAsNumber: number, columnName = '') {
+function numberToXlsxColumn(excelColumnAsNumber: number, columnName = '') {
   if (excelColumnAsNumber === 0) return columnName
 
   const remainder = (excelColumnAsNumber - 1) % 26
@@ -42,19 +42,19 @@ function numberToExcelColumn(excelColumnAsNumber: number, columnName = '') {
   const newColumnName = character + columnName
   const newExcelColumnAsNumber = Math.floor((excelColumnAsNumber - 1) / 26)
 
-  return numberToExcelColumn(newExcelColumnAsNumber, newColumnName)
+  return numberToXlsxColumn(newExcelColumnAsNumber, newColumnName)
 }
 
 export function decrementColumn(cellAddress: string): string {
   const { columnPart, rowPart } = parseCellAddress(cellAddress)
   if (columnPart === 'A') throw new Error('Cannot decrement column "A"')
-  const decrementedColumnPart = numberToExcelColumn(excelColumnToNumber(columnPart) - 1)
+  const decrementedColumnPart = numberToXlsxColumn(xlsxColumnToNumber(columnPart) - 1)
   return decrementedColumnPart + rowPart
 }
 
 export function incrementColumn(cellAddress: string): string {
   const { columnPart, rowPart } = parseCellAddress(cellAddress)
-  const incrementedColumn = numberToExcelColumn(excelColumnToNumber(columnPart) + 1)
+  const incrementedColumn = numberToXlsxColumn(xlsxColumnToNumber(columnPart) + 1)
   return incrementedColumn + rowPart
 }
 
@@ -69,4 +69,22 @@ export function incrementRow(cellAddress: string): string {
   const { columnPart, rowPart } = parseCellAddress(cellAddress)
   const incrementedRow = Number.parseInt(rowPart) + 1
   return columnPart + incrementedRow
+}
+
+export function* cellRangeIterator(range: string) {
+  const [beginCellAddress, endCellAddress] = range.split(':')
+  if (!beginCellAddress || !isValidCellAddress(beginCellAddress)) throw new Error(`Invalid range format: ${range}`)
+  if (!endCellAddress || !isValidCellAddress(endCellAddress)) throw new Error(`Invalid range format: ${range}`)
+  const begin = parseCellAddress(beginCellAddress)
+  const end = parseCellAddress(endCellAddress)
+  const beginColumnIndex = xlsxColumnToNumber(begin.columnPart)
+  const beginRowIndex = Number.parseInt(begin.rowPart)
+  const endColumnIndex = xlsxColumnToNumber(end.columnPart)
+  const endRowIndex = Number.parseInt(end.rowPart)
+
+  for (let column = beginColumnIndex; column <= endColumnIndex; column++) {
+    for (let row = beginRowIndex; row <= endRowIndex; row++) {
+      yield numberToXlsxColumn(column) + row
+    }
+  }
 }
