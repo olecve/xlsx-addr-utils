@@ -1,4 +1,13 @@
-import { isValidCellAddress, isValidCellRange, setColumn, setRow, decrementColumn, incrementColumn } from './index'
+import {
+  decrementColumn,
+  decrementRow,
+  incrementColumn,
+  incrementRow,
+  isValidCellAddress,
+  isValidCellRange,
+  setColumn,
+  setRow
+} from './index'
 
 it('isValidCellAddress', () => {
   expect(isValidCellAddress('A1')).toBe(true)
@@ -45,6 +54,10 @@ it('decrementColumn', () => {
   expect(decrementColumn('ABA10')).toBe('AAZ10')
   expect(decrementColumn('AAA10')).toBe('ZZ10')
   expect(decrementColumn('AAAA10')).toBe('ZZZ10')
+
+  expect(() => {
+    decrementColumn('A1')
+  }).toThrow('Cannot decrement column "A"')
 })
 
 it('incrementColumn', () => {
@@ -54,4 +67,22 @@ it('incrementColumn', () => {
   expect(incrementColumn('AAZ10')).toBe('ABA10')
   expect(incrementColumn('ZZ10')).toBe('AAA10')
   expect(incrementColumn('ZZZ10')).toBe('AAAA10')
+})
+
+it('decrementRow', () => {
+  expect(decrementRow('A2')).toBe('A1')
+  expect(decrementRow('B2')).toBe('B1')
+  expect(decrementRow('A10')).toBe('A9')
+  expect(decrementRow('A100')).toBe('A99')
+
+  expect(() => {
+    decrementRow('A1')
+  }).toThrow('Cannot decrement row "1"')
+})
+
+it('incrementRow', () => {
+  expect(incrementRow('A1')).toBe('A2')
+  expect(incrementRow('B1')).toBe('B2')
+  expect(incrementRow('A9')).toBe('A10')
+  expect(incrementRow('A99')).toBe('A100')
 })

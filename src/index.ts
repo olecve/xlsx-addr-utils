@@ -54,6 +54,19 @@ export function decrementColumn(cellAddress: string): string {
 
 export function incrementColumn(cellAddress: string): string {
   const { columnPart, rowPart } = parseCellAddress(cellAddress)
-  const decrementedColumnPart = numberToExcelColumn(excelColumnToNumber(columnPart) + 1)
-  return decrementedColumnPart + rowPart
+  const incrementedColumn = numberToExcelColumn(excelColumnToNumber(columnPart) + 1)
+  return incrementedColumn + rowPart
+}
+
+export function decrementRow(cellAddress: string): string {
+  const { columnPart, rowPart } = parseCellAddress(cellAddress)
+  if (rowPart === '1') throw new Error('Cannot decrement row "1"')
+  const decrementedRow = Number.parseInt(rowPart) - 1
+  return columnPart + decrementedRow
+}
+
+export function incrementRow(cellAddress: string): string {
+  const { columnPart, rowPart } = parseCellAddress(cellAddress)
+  const incrementedRow = Number.parseInt(rowPart) + 1
+  return columnPart + incrementedRow
 }
