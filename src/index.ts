@@ -51,3 +51,9 @@ export function decrementColumn(cellAddress: string): string {
   const decrementedColumnPart = numberToExcelColumn(excelColumnToNumber(columnPart) - 1)
   return decrementedColumnPart + rowPart
 }
+
+export function incrementColumn(cellAddress: string): string {
+  const { columnPart, rowPart } = parseCellAddress(cellAddress)
+  const decrementedColumnPart = numberToExcelColumn(excelColumnToNumber(columnPart) + 1)
+  return decrementedColumnPart + rowPart
+}

@@ -1,4 +1,4 @@
-import { isValidCellAddress, isValidCellRange, setColumn, setRow, decrementColumn } from './index'
+import { isValidCellAddress, isValidCellRange, setColumn, setRow, decrementColumn, incrementColumn } from './index'
 
 it('isValidCellAddress', () => {
   expect(isValidCellAddress('A1')).toBe(true)
@@ -45,4 +45,13 @@ it('decrementColumn', () => {
   expect(decrementColumn('ABA10')).toBe('AAZ10')
   expect(decrementColumn('AAA10')).toBe('ZZ10')
   expect(decrementColumn('AAAA10')).toBe('ZZZ10')
+})
+
+it('incrementColumn', () => {
+  expect(incrementColumn('A10')).toBe('B10')
+  expect(incrementColumn('Z10')).toBe('AA10')
+  expect(incrementColumn('AA10')).toBe('AB10')
+  expect(incrementColumn('AAZ10')).toBe('ABA10')
+  expect(incrementColumn('ZZ10')).toBe('AAA10')
+  expect(incrementColumn('ZZZ10')).toBe('AAAA10')
 })
