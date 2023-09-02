@@ -2,7 +2,15 @@
   "name": "xlsx-addr-utils",
   "version": "0.0.1",
   "description": "Simplify manipulation of XLSX cell addresses",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md",
+    "package.json"
+  ],
   "repository": "https://github.com/olecve/xlsx-addr-utils",
   "author": "Oleg Tsvetkov <olecve@gmail.com>",
   "license": "MIT",
@@ -14,6 +22,7 @@
     "typescript": "^5.2.2"
   },
   "scripts": {
+    "build": "tsc",
     "test": "jest",
     "test:watch": "jest --watch"
   }
