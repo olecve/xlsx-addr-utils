@@ -1,5 +1,6 @@
 import {
   cellRangeIterator,
+  columnRangeIterator,
   decrementColumn,
   decrementRow,
   incrementColumn,
@@ -104,5 +105,23 @@ it('cellRangeIterator', () => {
 
   expect(() => {
     cellRangeIterator('A5:A').next()
+  }).toThrow('Invalid range format: A5:A')
+})
+
+it('columnRangeIterator', () => {
+  expect([...columnRangeIterator('A1:A5')]).toStrictEqual(['A1:A5'])
+  expect([...columnRangeIterator('A1:F5')]).toStrictEqual(['A1:A5', 'B1:B5', 'C1:C5', 'D1:D5', 'E1:E5', 'F1:F5'])
+  expect([...columnRangeIterator('Z1:AA5')]).toStrictEqual(['Z1:Z5', 'AA1:AA5'])
+
+  expect(() => {
+    columnRangeIterator('AA5').next()
+  }).toThrow('Invalid range format: AA5')
+
+  expect(() => {
+    columnRangeIterator('A:A5').next()
+  }).toThrow('Invalid range format: A:A5')
+
+  expect(() => {
+    columnRangeIterator('A5:A').next()
   }).toThrow('Invalid range format: A5:A')
 })
