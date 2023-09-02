@@ -30,19 +30,19 @@ function parseCellAddress(cellAddress: string): { columnPart: string; rowPart: s
   return { columnPart, rowPart }
 }
 
-function xlsxColumnToNumber(excelColumn: string) {
-  return excelColumn.split('').reduce((result, currentValue) => result * 26 + parseInt(currentValue, 36) - 9, 0)
+function xlsxColumnToNumber(xlsxColumn: string) {
+  return xlsxColumn.split('').reduce((result, currentValue) => result * 26 + parseInt(currentValue, 36) - 9, 0)
 }
 
-function numberToXlsxColumn(excelColumnAsNumber: number, columnName = '') {
-  if (excelColumnAsNumber === 0) return columnName
+function numberToXlsxColumn(xlsxColumnAsNumber: number, columnName = '') {
+  if (xlsxColumnAsNumber === 0) return columnName
 
-  const remainder = (excelColumnAsNumber - 1) % 26
+  const remainder = (xlsxColumnAsNumber - 1) % 26
   const character = String.fromCharCode('A'.charCodeAt(0) + remainder)
   const newColumnName = character + columnName
-  const newExcelColumnAsNumber = Math.floor((excelColumnAsNumber - 1) / 26)
+  const newXlsxColumnAsNumber = Math.floor((xlsxColumnAsNumber - 1) / 26)
 
-  return numberToXlsxColumn(newExcelColumnAsNumber, newColumnName)
+  return numberToXlsxColumn(newXlsxColumnAsNumber, newColumnName)
 }
 
 export function decrementColumn(cellAddress: string): string {
