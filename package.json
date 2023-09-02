@@ -5,7 +5,7 @@
   "repository": "https://github.com/olecve/xlsx-addr-utils",
   "license": "MIT",
   "author": "Oleg Tsvetkov <olecve@gmail.com>",
-  "type": "module",
+  "type": "commonjs",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
