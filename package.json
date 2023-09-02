@@ -9,7 +9,10 @@
     "office",
     "excel-utils"
   ],
-  "repository": "https://github.com/olecve/xlsx-addr-utils",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/olecve/xlsx-addr-utils.git"
+  },
   "license": "MIT",
   "author": "Oleg Tsvetkov <olecve@gmail.com>",
   "type": "commonjs",
