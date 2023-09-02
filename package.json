@@ -2,6 +2,13 @@
   "name": "xlsx-addr-utils",
   "version": "0.0.1",
   "description": "Simplify manipulation of XLSX cell addresses",
+  "keywords": [
+    "excel",
+    "xlsx",
+    "spreadsheet",
+    "office",
+    "excel-utils"
+  ],
   "repository": "https://github.com/olecve/xlsx-addr-utils",
   "license": "MIT",
   "author": "Oleg Tsvetkov <olecve@gmail.com>",
@@ -16,11 +23,11 @@
   ],
   "scripts": {
     "build": "tsc",
+    "fmt": "yarn fmt:sort-package-json && yarn fmt:prettier",
     "fmt:prettier": "prettier --write \"**/*.ts\"",
     "fmt:sort-package-json": "sort-package-json package.json",
-    "fmt": "yarn fmt:sort-package-json && yarn fmt:prettier",
-    "test:watch": "jest --watch",
-    "test": "jest"
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "devDependencies": {
     "@types/jest": "^29.5.4",
