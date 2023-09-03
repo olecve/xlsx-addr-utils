@@ -1,6 +1,6 @@
 {
   "name": "xlsx-addr-utils",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Simplify manipulation of XLSX cell addresses",
   "keywords": [
     "excel",
