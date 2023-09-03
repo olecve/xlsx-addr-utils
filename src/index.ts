@@ -104,3 +104,17 @@ export function* columnRangeIterator(range: string) {
     yield `${numberToXlsxColumn(column)}${beginRowIndex}:${numberToXlsxColumn(column)}${endRowIndex}`
   }
 }
+
+export function* rowRangeIterator(range: string) {
+  const [beginCellAddress, endCellAddress] = range.split(':')
+  if (!beginCellAddress || !isValidCellAddress(beginCellAddress)) throw new Error(`Invalid range format: ${range}`)
+  if (!endCellAddress || !isValidCellAddress(endCellAddress)) throw new Error(`Invalid range format: ${range}`)
+  const begin = parseCellAddress(beginCellAddress)
+  const end = parseCellAddress(endCellAddress)
+  const beginRowIndex = Number.parseInt(begin.rowPart)
+  const endRowIndex = Number.parseInt(end.rowPart)
+
+  for (let row = beginRowIndex; row <= endRowIndex; row++) {
+    yield `${begin.columnPart}${row}:${end.columnPart}${row}`
+  }
+}
