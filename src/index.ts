@@ -71,7 +71,7 @@ export function incrementRow(cellAddress: string): string {
   return columnPart + incrementedRow
 }
 
-export function* cellRangeIterator(range: string) {
+function parseRange(range: String) {
   const [beginCellAddress, endCellAddress] = range.split(':')
   if (!beginCellAddress || !isValidCellAddress(beginCellAddress)) throw new Error(`Invalid range format: ${range}`)
   if (!endCellAddress || !isValidCellAddress(endCellAddress)) throw new Error(`Invalid range format: ${range}`)
@@ -81,7 +81,11 @@ export function* cellRangeIterator(range: string) {
   const beginRowIndex = Number.parseInt(begin.rowPart)
   const endColumnIndex = xlsxColumnToNumber(end.columnPart)
   const endRowIndex = Number.parseInt(end.rowPart)
+  return { begin, end, beginColumnIndex, beginRowIndex, endColumnIndex, endRowIndex }
+}
 
+export function* cellRangeIterator(range: string) {
+  const { beginColumnIndex, beginRowIndex, endColumnIndex, endRowIndex } = parseRange(range)
   for (let column = beginColumnIndex; column <= endColumnIndex; column++) {
     for (let row = beginRowIndex; row <= endRowIndex; row++) {
       yield numberToXlsxColumn(column) + row
@@ -90,30 +94,14 @@ export function* cellRangeIterator(range: string) {
 }
 
 export function* columnRangeIterator(range: string) {
-  const [beginCellAddress, endCellAddress] = range.split(':')
-  if (!beginCellAddress || !isValidCellAddress(beginCellAddress)) throw new Error(`Invalid range format: ${range}`)
-  if (!endCellAddress || !isValidCellAddress(endCellAddress)) throw new Error(`Invalid range format: ${range}`)
-  const begin = parseCellAddress(beginCellAddress)
-  const end = parseCellAddress(endCellAddress)
-  const beginColumnIndex = xlsxColumnToNumber(begin.columnPart)
-  const beginRowIndex = Number.parseInt(begin.rowPart)
-  const endColumnIndex = xlsxColumnToNumber(end.columnPart)
-  const endRowIndex = Number.parseInt(end.rowPart)
-
+  const { beginColumnIndex, beginRowIndex, endColumnIndex, endRowIndex } = parseRange(range)
   for (let column = beginColumnIndex; column <= endColumnIndex; column++) {
     yield `${numberToXlsxColumn(column)}${beginRowIndex}:${numberToXlsxColumn(column)}${endRowIndex}`
   }
 }
 
 export function* rowRangeIterator(range: string) {
-  const [beginCellAddress, endCellAddress] = range.split(':')
-  if (!beginCellAddress || !isValidCellAddress(beginCellAddress)) throw new Error(`Invalid range format: ${range}`)
-  if (!endCellAddress || !isValidCellAddress(endCellAddress)) throw new Error(`Invalid range format: ${range}`)
-  const begin = parseCellAddress(beginCellAddress)
-  const end = parseCellAddress(endCellAddress)
-  const beginRowIndex = Number.parseInt(begin.rowPart)
-  const endRowIndex = Number.parseInt(end.rowPart)
-
+  const { begin, beginRowIndex, end, endRowIndex } = parseRange(range)
   for (let row = beginRowIndex; row <= endRowIndex; row++) {
     yield `${begin.columnPart}${row}:${end.columnPart}${row}`
   }
