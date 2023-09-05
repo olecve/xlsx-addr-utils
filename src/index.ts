@@ -93,6 +93,10 @@ export function* cellRangeIterator(range: string) {
   }
 }
 
+export function cellRangeArray(range: string): string[] {
+  return [...cellRangeIterator(range)]
+}
+
 export function* columnRangeIterator(range: string) {
   const { beginColumnIndex, beginRowIndex, endColumnIndex, endRowIndex } = parseRange(range)
   for (let column = beginColumnIndex; column <= endColumnIndex; column++) {
@@ -100,9 +104,17 @@ export function* columnRangeIterator(range: string) {
   }
 }
 
+export function columnRangeArray(range: string): string[] {
+  return [...columnRangeIterator(range)]
+}
+
 export function* rowRangeIterator(range: string) {
   const { begin, beginRowIndex, end, endRowIndex } = parseRange(range)
   for (let row = beginRowIndex; row <= endRowIndex; row++) {
     yield `${begin.columnPart}${row}:${end.columnPart}${row}`
   }
+}
+
+export function rowRangeArray(range: string): string[] {
+  return [...rowRangeIterator(range)]
 }

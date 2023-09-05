@@ -1,5 +1,6 @@
 import {
   cellRangeIterator,
+  cellRangeArray,
   columnRangeIterator,
   decrementColumn,
   decrementRow,
@@ -9,7 +10,9 @@ import {
   isValidCellRange,
   rowRangeIterator,
   setColumn,
-  setRow
+  setRow,
+  columnRangeArray,
+  rowRangeArray
 } from './index'
 
 it('isValidCellAddress', () => {
@@ -90,59 +93,122 @@ it('incrementRow', () => {
   expect(incrementRow('A99')).toBe('A100')
 })
 
-it('cellRangeIterator', () => {
-  expect([...cellRangeIterator('A1:A5')]).toStrictEqual(['A1', 'A2', 'A3', 'A4', 'A5'])
-  expect([...cellRangeIterator('A1:B5')]).toStrictEqual(['A1', 'A2', 'A3', 'A4', 'A5', 'B1', 'B2', 'B3', 'B4', 'B5'])
-  expect([...cellRangeIterator('A1:E1')]).toStrictEqual(['A1', 'B1', 'C1', 'D1', 'E1'])
-  expect([...cellRangeIterator('Z1:AA2')]).toStrictEqual(['Z1', 'Z2', 'AA1', 'AA2'])
+describe('cell ranges functions', () => {
+  it('cellRangeIterator', () => {
+    expect([...cellRangeIterator('A1:A5')]).toStrictEqual(['A1', 'A2', 'A3', 'A4', 'A5'])
+    expect([...cellRangeIterator('A1:B5')]).toStrictEqual(['A1', 'A2', 'A3', 'A4', 'A5', 'B1', 'B2', 'B3', 'B4', 'B5'])
+    expect([...cellRangeIterator('A1:E1')]).toStrictEqual(['A1', 'B1', 'C1', 'D1', 'E1'])
+    expect([...cellRangeIterator('Z1:AA2')]).toStrictEqual(['Z1', 'Z2', 'AA1', 'AA2'])
 
-  expect(() => {
-    cellRangeIterator('AA5').next()
-  }).toThrow('Invalid range format: AA5')
+    expect(() => {
+      cellRangeIterator('AA5').next()
+    }).toThrow('Invalid range format: AA5')
 
-  expect(() => {
-    cellRangeIterator('A:A5').next()
-  }).toThrow('Invalid range format: A:A5')
+    expect(() => {
+      cellRangeIterator('A:A5').next()
+    }).toThrow('Invalid range format: A:A5')
 
-  expect(() => {
-    cellRangeIterator('A5:A').next()
-  }).toThrow('Invalid range format: A5:A')
+    expect(() => {
+      cellRangeIterator('A5:A').next()
+    }).toThrow('Invalid range format: A5:A')
+  })
+
+  it('cellRangeArray', () => {
+    expect(cellRangeArray('A1:A5')).toStrictEqual(['A1', 'A2', 'A3', 'A4', 'A5'])
+    expect(cellRangeArray('A1:B5')).toStrictEqual(['A1', 'A2', 'A3', 'A4', 'A5', 'B1', 'B2', 'B3', 'B4', 'B5'])
+    expect(cellRangeArray('A1:E1')).toStrictEqual(['A1', 'B1', 'C1', 'D1', 'E1'])
+    expect(cellRangeArray('Z1:AA2')).toStrictEqual(['Z1', 'Z2', 'AA1', 'AA2'])
+
+    expect(() => {
+      cellRangeArray('AA5')
+    }).toThrow('Invalid range format: AA5')
+
+    expect(() => {
+      cellRangeArray('A:A5')
+    }).toThrow('Invalid range format: A:A5')
+
+    expect(() => {
+      cellRangeArray('A5:A')
+    }).toThrow('Invalid range format: A5:A')
+  })
 })
 
-it('columnRangeIterator', () => {
-  expect([...columnRangeIterator('A1:A5')]).toStrictEqual(['A1:A5'])
-  expect([...columnRangeIterator('A1:F1')]).toStrictEqual(['A1:A1', 'B1:B1', 'C1:C1', 'D1:D1', 'E1:E1', 'F1:F1'])
-  expect([...columnRangeIterator('A1:F5')]).toStrictEqual(['A1:A5', 'B1:B5', 'C1:C5', 'D1:D5', 'E1:E5', 'F1:F5'])
-  expect([...columnRangeIterator('Z1:AA5')]).toStrictEqual(['Z1:Z5', 'AA1:AA5'])
+describe('column ranges functions', () => {
+  it('columnRangeIterator', () => {
+    expect([...columnRangeIterator('A1:A5')]).toStrictEqual(['A1:A5'])
+    expect([...columnRangeIterator('A1:F1')]).toStrictEqual(['A1:A1', 'B1:B1', 'C1:C1', 'D1:D1', 'E1:E1', 'F1:F1'])
+    expect([...columnRangeIterator('A1:F5')]).toStrictEqual(['A1:A5', 'B1:B5', 'C1:C5', 'D1:D5', 'E1:E5', 'F1:F5'])
+    expect([...columnRangeIterator('Z1:AA5')]).toStrictEqual(['Z1:Z5', 'AA1:AA5'])
 
-  expect(() => {
-    columnRangeIterator('AA5').next()
-  }).toThrow('Invalid range format: AA5')
+    expect(() => {
+      columnRangeIterator('AA5').next()
+    }).toThrow('Invalid range format: AA5')
 
-  expect(() => {
-    columnRangeIterator('A:A5').next()
-  }).toThrow('Invalid range format: A:A5')
+    expect(() => {
+      columnRangeIterator('A:A5').next()
+    }).toThrow('Invalid range format: A:A5')
 
-  expect(() => {
-    columnRangeIterator('A5:A').next()
-  }).toThrow('Invalid range format: A5:A')
+    expect(() => {
+      columnRangeIterator('A5:A').next()
+    }).toThrow('Invalid range format: A5:A')
+  })
+
+  it('columnRangeArray', () => {
+    expect(columnRangeArray('A1:A5')).toStrictEqual(['A1:A5'])
+    expect(columnRangeArray('A1:F1')).toStrictEqual(['A1:A1', 'B1:B1', 'C1:C1', 'D1:D1', 'E1:E1', 'F1:F1'])
+    expect(columnRangeArray('A1:F5')).toStrictEqual(['A1:A5', 'B1:B5', 'C1:C5', 'D1:D5', 'E1:E5', 'F1:F5'])
+    expect(columnRangeArray('Z1:AA5')).toStrictEqual(['Z1:Z5', 'AA1:AA5'])
+
+    expect(() => {
+      columnRangeArray('AA5')
+    }).toThrow('Invalid range format: AA5')
+
+    expect(() => {
+      columnRangeArray('A:A5')
+    }).toThrow('Invalid range format: A:A5')
+
+    expect(() => {
+      columnRangeArray('A5:A')
+    }).toThrow('Invalid range format: A5:A')
+  })
 })
 
-it('rowRangeIterator', () => {
-  expect([...rowRangeIterator('A1:A5')]).toStrictEqual(['A1:A1', 'A2:A2', 'A3:A3', 'A4:A4', 'A5:A5'])
-  expect([...rowRangeIterator('A1:F1')]).toStrictEqual(['A1:F1'])
-  expect([...rowRangeIterator('A1:F5')]).toStrictEqual(['A1:F1', 'A2:F2', 'A3:F3', 'A4:F4', 'A5:F5'])
-  expect([...rowRangeIterator('Z1:AA5')]).toStrictEqual(['Z1:AA1', 'Z2:AA2', 'Z3:AA3', 'Z4:AA4', 'Z5:AA5'])
+describe('row ranges functions', () => {
+  it('rowRangeIterator', () => {
+    expect([...rowRangeIterator('A1:A5')]).toStrictEqual(['A1:A1', 'A2:A2', 'A3:A3', 'A4:A4', 'A5:A5'])
+    expect([...rowRangeIterator('A1:F1')]).toStrictEqual(['A1:F1'])
+    expect([...rowRangeIterator('A1:F5')]).toStrictEqual(['A1:F1', 'A2:F2', 'A3:F3', 'A4:F4', 'A5:F5'])
+    expect([...rowRangeIterator('Z1:AA5')]).toStrictEqual(['Z1:AA1', 'Z2:AA2', 'Z3:AA3', 'Z4:AA4', 'Z5:AA5'])
 
-  expect(() => {
-    rowRangeIterator('AA5').next()
-  }).toThrow('Invalid range format: AA5')
+    expect(() => {
+      rowRangeIterator('AA5').next()
+    }).toThrow('Invalid range format: AA5')
 
-  expect(() => {
-    rowRangeIterator('A:A5').next()
-  }).toThrow('Invalid range format: A:A5')
+    expect(() => {
+      rowRangeIterator('A:A5').next()
+    }).toThrow('Invalid range format: A:A5')
 
-  expect(() => {
-    rowRangeIterator('A5:A').next()
-  }).toThrow('Invalid range format: A5:A')
+    expect(() => {
+      rowRangeIterator('A5:A').next()
+    }).toThrow('Invalid range format: A5:A')
+  })
+
+  it('rowRangeArray', () => {
+    expect(rowRangeArray('A1:A5')).toStrictEqual(['A1:A1', 'A2:A2', 'A3:A3', 'A4:A4', 'A5:A5'])
+    expect(rowRangeArray('A1:F1')).toStrictEqual(['A1:F1'])
+    expect(rowRangeArray('A1:F5')).toStrictEqual(['A1:F1', 'A2:F2', 'A3:F3', 'A4:F4', 'A5:F5'])
+    expect(rowRangeArray('Z1:AA5')).toStrictEqual(['Z1:AA1', 'Z2:AA2', 'Z3:AA3', 'Z4:AA4', 'Z5:AA5'])
+
+    expect(() => {
+      rowRangeArray('AA5')
+    }).toThrow('Invalid range format: AA5')
+
+    expect(() => {
+      rowRangeArray('A:A5')
+    }).toThrow('Invalid range format: A:A5')
+
+    expect(() => {
+      rowRangeArray('A5:A')
+    }).toThrow('Invalid range format: A5:A')
+  })
 })
