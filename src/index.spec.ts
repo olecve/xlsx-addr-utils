@@ -1,6 +1,7 @@
 import {
-  cellRangeIterator,
   cellRangeArray,
+  cellRangeIterator,
+  columnRangeArray,
   columnRangeIterator,
   decrementColumn,
   decrementRow,
@@ -8,11 +9,10 @@ import {
   incrementRow,
   isValidCellAddress,
   isValidCellRange,
+  rowRangeArray,
   rowRangeIterator,
   setColumn,
-  setRow,
-  columnRangeArray,
-  rowRangeArray
+  setRow
 } from './index'
 
 it('isValidCellAddress', () => {
