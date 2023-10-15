@@ -26,11 +26,12 @@
   ],
   "scripts": {
     "build": "tsc",
-    "fmt": "yarn fmt:sort-package-json && yarn fmt:prettier",
+    "changeset": "changeset",
     "fmt:prettier": "prettier --write \"**/*.ts\"",
     "fmt:sort-package-json": "sort-package-json package.json",
-    "test": "jest",
-    "test:watch": "jest --watch"
+    "fmt": "yarn fmt:sort-package-json && yarn fmt:prettier",
+    "test:watch": "jest --watch",
+    "test": "jest"
   },
   "devDependencies": {
     "@changesets/cli": "^2.26.2",
