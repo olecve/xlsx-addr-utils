@@ -4,8 +4,8 @@
 
 ### Patch Changes
 
-- 298bd78: Improve error handling
-- 298bd78: Reorganise internal logic
+- Improve error handling
+- Reorganise internal logic
 
 ## 0.2.0
 
