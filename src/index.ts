@@ -1,33 +1,41 @@
-const cellAddressPattern = /^[A-Z]+[1-9]\d*$/
-const cellRangePattern = /^[A-Z]+[1-9]\d*:[A-Z]+[1-9]\d*$/
+import { CellAddress } from './types'
 
-export function isValidCellAddress(address: string): boolean {
-  return cellAddressPattern.test(address)
-}
+const cellRangePattern = /^[A-Z]+[1-9]\d*:[A-Z]+[1-9]\d*$/
 
 export function isValidCellRange(range: string): boolean {
   return cellRangePattern.test(range)
 }
 
-export function setColumn(address: string, newColumn: string): string {
-  const rowMatch = address.match(/\d+/)
-  if (!rowMatch) throw new Error(`Invalid address format: ${address}`)
-  const rowPart = rowMatch[0]
-  return newColumn + rowPart
-}
-
-export function setRow(address: string, newRow: number | string): string {
-  const columnMatch = address.match(/[A-Z]+/)
-  if (!columnMatch) throw new Error(`Invalid address format: ${address}`)
-  const columnPart = columnMatch[0]
-  return columnPart + newRow
-}
-
-function parseCellAddress(cellAddress: string): { columnPart: string; rowPart: string } {
+function parceCellAddress(cellAddress: string): CellAddress {
   const match = cellAddress.match(/^([A-Z]+)([1-9]\d*)$/)
   if (!match || !match[1] || !match[2]) throw new Error(`Invalid cell address: ${cellAddress}`)
   const [_fullMatch, columnPart, rowPart] = match
-  return { columnPart, rowPart }
+
+  return {
+    column: columnPart,
+    row: Number.parseInt(rowPart)
+  }
+}
+
+export function isValidCellAddress(address: string): boolean {
+  try {
+    parceCellAddress(address)
+    return true
+  } catch (_exception) {
+    return false
+  }
+}
+
+function cellAddressToString(cellAddress: CellAddress): string {
+  return cellAddress.column + cellAddress.row
+}
+
+export function setColumn(cellAddress: string, newColumn: string): string {
+  return cellAddressToString({ ...parceCellAddress(cellAddress), column: newColumn })
+}
+
+export function setRow(cellAddress: string, newRow: number | string): string {
+  return cellAddressToString({ ...parceCellAddress(cellAddress), row: Number.parseInt(String(newRow)) })
 }
 
 function xlsxColumnToNumber(xlsxColumn: string) {
@@ -46,41 +54,41 @@ function numberToXlsxColumn(xlsxColumnAsNumber: number, columnName = '') {
 }
 
 export function decrementColumn(cellAddress: string): string {
-  const { columnPart, rowPart } = parseCellAddress(cellAddress)
-  if (columnPart === 'A') throw new Error('Cannot decrement column "A"')
-  const decrementedColumnPart = numberToXlsxColumn(xlsxColumnToNumber(columnPart) - 1)
-  return decrementedColumnPart + rowPart
+  const { column, row } = parceCellAddress(cellAddress)
+  if (column === 'A') throw new Error('Cannot decrement column "A"')
+  const decrementedColumn = numberToXlsxColumn(xlsxColumnToNumber(column) - 1)
+  return decrementedColumn + row
 }
 
 export function incrementColumn(cellAddress: string): string {
-  const { columnPart, rowPart } = parseCellAddress(cellAddress)
-  const incrementedColumn = numberToXlsxColumn(xlsxColumnToNumber(columnPart) + 1)
-  return incrementedColumn + rowPart
+  const { column, row } = parceCellAddress(cellAddress)
+  const incrementedColumn = numberToXlsxColumn(xlsxColumnToNumber(column) + 1)
+  return incrementedColumn + row
 }
 
 export function decrementRow(cellAddress: string): string {
-  const { columnPart, rowPart } = parseCellAddress(cellAddress)
-  if (rowPart === '1') throw new Error('Cannot decrement row "1"')
-  const decrementedRow = Number.parseInt(rowPart) - 1
-  return columnPart + decrementedRow
+  const { column, row } = parceCellAddress(cellAddress)
+  if (row === 1) throw new Error('Cannot decrement row "1"')
+  const decrementedRow = row - 1
+  return column + decrementedRow
 }
 
 export function incrementRow(cellAddress: string): string {
-  const { columnPart, rowPart } = parseCellAddress(cellAddress)
-  const incrementedRow = Number.parseInt(rowPart) + 1
-  return columnPart + incrementedRow
+  const { column, row } = parceCellAddress(cellAddress)
+  const incrementedRow = row + 1
+  return column + incrementedRow
 }
 
 function parseRange(range: String) {
   const [beginCellAddress, endCellAddress] = range.split(':')
   if (!beginCellAddress || !isValidCellAddress(beginCellAddress)) throw new Error(`Invalid range format: ${range}`)
   if (!endCellAddress || !isValidCellAddress(endCellAddress)) throw new Error(`Invalid range format: ${range}`)
-  const begin = parseCellAddress(beginCellAddress)
-  const end = parseCellAddress(endCellAddress)
-  const beginColumnIndex = xlsxColumnToNumber(begin.columnPart)
-  const beginRowIndex = Number.parseInt(begin.rowPart)
-  const endColumnIndex = xlsxColumnToNumber(end.columnPart)
-  const endRowIndex = Number.parseInt(end.rowPart)
+  const begin = parceCellAddress(beginCellAddress)
+  const end = parceCellAddress(endCellAddress)
+  const beginColumnIndex = xlsxColumnToNumber(begin.column)
+  const beginRowIndex = begin.row
+  const endColumnIndex = xlsxColumnToNumber(end.column)
+  const endRowIndex = end.row
   return { begin, end, beginColumnIndex, beginRowIndex, endColumnIndex, endRowIndex }
 }
 
@@ -111,7 +119,7 @@ export function columnRangeArray(range: string): string[] {
 export function* rowRangeIterator(range: string) {
   const { begin, beginRowIndex, end, endRowIndex } = parseRange(range)
   for (let row = beginRowIndex; row <= endRowIndex; row++) {
-    yield `${begin.columnPart}${row}:${end.columnPart}${row}`
+    yield `${begin.column}${row}:${end.column}${row}`
   }
 }
 
