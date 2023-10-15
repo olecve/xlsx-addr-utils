@@ -91,19 +91,19 @@ function parseRange(range: String): Range {
   }
 }
 
-function rangeToIndexes({ begin, end }: Range) {
+function rangeToNumericIndexes({ begin, end }: Range) {
   return {
-    beginColumnIndex: xlsxColumnToNumber(begin.column),
-    beginRowIndex: begin.row,
-    endColumnIndex: xlsxColumnToNumber(end.column),
-    endRowIndex: end.row
+    beginColumn: xlsxColumnToNumber(begin.column),
+    beginRow: begin.row,
+    endColumn: xlsxColumnToNumber(end.column),
+    endRow: end.row
   }
 }
 
 export function* cellRangeIterator(range: string) {
-  const { beginColumnIndex, beginRowIndex, endColumnIndex, endRowIndex } = rangeToIndexes(parseRange(range))
-  for (let column = beginColumnIndex; column <= endColumnIndex; column++) {
-    for (let row = beginRowIndex; row <= endRowIndex; row++) {
+  const { beginColumn, beginRow, endColumn, endRow } = rangeToNumericIndexes(parseRange(range))
+  for (let column = beginColumn; column <= endColumn; column++) {
+    for (let row = beginRow; row <= endRow; row++) {
       yield numberToXlsxColumn(column) + row
     }
   }
@@ -114,9 +114,9 @@ export function cellRangeArray(range: string): string[] {
 }
 
 export function* columnRangeIterator(range: string) {
-  const { beginColumnIndex, beginRowIndex, endColumnIndex, endRowIndex } = rangeToIndexes(parseRange(range))
-  for (let column = beginColumnIndex; column <= endColumnIndex; column++) {
-    yield `${numberToXlsxColumn(column)}${beginRowIndex}:${numberToXlsxColumn(column)}${endRowIndex}`
+  const { beginColumn, beginRow, endColumn, endRow } = rangeToNumericIndexes(parseRange(range))
+  for (let column = beginColumn; column <= endColumn; column++) {
+    yield `${numberToXlsxColumn(column)}${beginRow}:${numberToXlsxColumn(column)}${endRow}`
   }
 }
 
@@ -126,8 +126,8 @@ export function columnRangeArray(range: string): string[] {
 
 export function* rowRangeIterator(range: string) {
   const rangeObject = parseRange(range)
-  const { beginRowIndex, endRowIndex } = rangeToIndexes(rangeObject)
-  for (let row = beginRowIndex; row <= endRowIndex; row++) {
+  const { beginRow, endRow } = rangeToNumericIndexes(rangeObject)
+  for (let row = beginRow; row <= endRow; row++) {
     yield `${rangeObject.begin.column}${row}:${rangeObject.end.column}${row}`
   }
 }
