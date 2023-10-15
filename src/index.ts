@@ -8,7 +8,7 @@ export function isValidCellRange(range: string): boolean {
 
 function parceCellAddress(cellAddress: string): CellAddress {
   const match = cellAddress.match(/^([A-Z]+)([1-9]\d*)$/)
-  if (!match || !match[1] || !match[2]) throw new Error(`Invalid cell address: ${cellAddress}`)
+  if (!match || !match[1] || !match[2]) throw new Error(`Invalid cell address: "${cellAddress}"`)
   const [_fullMatch, columnPart, rowPart] = match
 
   return {
@@ -87,7 +87,7 @@ function parseRange(range: String): Range {
     const end = parceCellAddress(endCellAddress)
     return { begin, end }
   } catch (_e) {
-    throw new Error(`Invalid range format: ${range}`)
+    throw new Error(`Invalid range format: "${range}"`)
   }
 }
 
