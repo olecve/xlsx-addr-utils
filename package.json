@@ -1,6 +1,6 @@
 {
   "name": "xlsx-addr-utils",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Simplify manipulation of XLSX cell addresses",
   "keywords": [
     "excel",
@@ -26,6 +26,8 @@
   ],
   "scripts": {
     "build": "tsc",
+    "changeset:publish": "changeset publish",
+    "changeset:version": "changeset version",
     "changeset": "changeset",
     "fmt:prettier": "prettier --write \"**/*.ts\"",
     "fmt:sort-package-json": "sort-package-json package.json",
